@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>停止時計</title>
+    <style>
+        @font-face {
+            font-family: 'degi';
+            src: url(./dash_digital-7.ttf);
+        }
+        @font-face {
+            font-family: 'japan2';
+            src: url(./青柳疎石フォント2.ttf);
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <p id='time'>00:00:00</p>
+        <div class="b-wrapper">
+            <button id="start">start</button>
+            <button id="stop">stop</button>
+            <button id="reset" class="reset">reset</button>
+        </div>
+    </div>
+    <div class="wrapper2">
+        <p id='time2'>零<span>分</span>零<span>秒</span>零</p>
+        <div class="b-wrapper">
+            <button class="button2" id="start2">開始</button>
+            <button class="button2" id="stop2">停止</button>
+            <button class="button2" id="reset2" class="reset">初期化</button>
+        </div>
+    </div>
+    
+    <script>
+        const time = document.getElementById('time');
+        const start = document.getElementById('start');
+        const stop = document.getElementById('stop');
+        const reset = document.getElementById('reset');
+
+        let elapsed = 0;
+
+        let intervalId = null;
+
+        start.addEventListener('click',function(e){
+            let pre = new Date();
+            if(intervalId === null){
+            intervalId = setInterval(function(){
+              const now = new Date();
+              elapsed += now - pre;
+              pre = now;
+                    const ms = Math.floor(elapsed/10).toString();
+                    const s = (Math.floor(elapsed/1000) % 60).toString();
+                    const m = Math.floor(elapsed/60000).toString();
+                    time.innerHTML = `${('00'+m).slice(-2)}:${('00'+s).slice(-2)}:${('00'+ms).slice(-2)}`;
+            },10);}
+        });
+
+        stop.addEventListener('click',function(e){
+            clearInterval(intervalId);
+            intervalId = null;
+        });
+
+        reset.addEventListener('click',function(e){
+            elapsed = 0;
+            time.innerHTML= "00:00:00";
+        });
+/////////////////////////////////////////////////////////////
+
+        const time2 = document.getElementById('time2');
+        const start2 = document.getElementById('start2');
+        const stop2 = document.getElementById('stop2');
+        const reset2 = document.getElementById('reset2');
+
+        let elapsed2 = 0;
+
+        let intervalId2 = null;
+
+        const japanese = ["零","壱","弐","参","肆","伍","陸","漆","捌","玖","拾","拾壱","拾弐","拾参","拾肆","拾伍","拾陸","拾漆","拾捌","拾玖","弐拾","弐拾壱","弐拾弐","弐拾参","弐拾肆","弐拾伍","弐拾陸","弐拾漆","弐拾捌","弐拾玖","参拾","参拾壱","参拾弐","参拾参","参拾肆","参拾伍","参拾陸","参拾漆","参拾捌","参拾玖","肆拾","肆拾壱","肆拾弐","肆拾参","肆拾肆","肆拾伍","肆拾陸","肆拾漆","肆拾捌","肆拾玖","伍拾","伍拾壱","伍拾弐","伍拾参","伍拾肆","伍拾伍","伍拾陸","伍拾漆","伍拾捌","伍拾玖",]
+        const japanese2 = ["零","一","二","三","四","五","六","七","八","九","十","十一","十二","十三","十四","十五","十六","十七","十八","十九","二十","二十一","二十二","二十三","二十四","二十五","二十六","二十七","二十八","二十九","三十","三十一","三十二","三十三","三十四","三十五","三十六","三十七","三十八","三十九","四十","四十一","四十二","四十三","四十四","四十五","四十六","四十七","四十八","四十九","五十","五十一","五十二","五十三","五十四","五十五","五十六","五十七","五十八","五十九",]
+
+
+        function changeJapanese_ms(num){
+            for($i = 0;$i <10;$i++){
+                num = num.slice(-1);
+                if((num) <= $i){num = `${japanese[$i]}`}
+            }
+            return num;
+        }
+        function changeJapanese_s(num){
+            for($i = 0;$i <60;$i++){
+                
+                if(num === $i){num = `${japanese[$i]}`}
+            }
+            return num;
+        }
+
+        start2.addEventListener('click',function(e){
+            let pre2 = new Date();
+            if(intervalId2 === null){
+            intervalId2 = setInterval(function(){
+              const now2 = new Date();
+              elapsed2 += now2 - pre2;
+              pre2 = now2;
+                    let ms2 = Math.floor(elapsed2/100).toString();
+                    let s2 = (Math.floor(elapsed2/1000) % 60);
+                    let m2 = Math.floor(elapsed2/60000);
+                    ms2 = changeJapanese_ms(ms2);
+                    s2 = changeJapanese_s(s2);
+                    m2 = changeJapanese_s(m2);
+                    time2.innerHTML = `${m2}<span>分</span>${s2}<span>秒</span>${ms2}`;
+            },10);}
+        });
+
+        stop2.addEventListener('click',function(e){
+            clearInterval(intervalId2);
+            intervalId2 = null;
+        });
+
+        reset2.addEventListener('click',function(e){
+            elapsed2 = 0;
+            time2.innerHTML= "零<span>分</span>零<span>秒</span>零";
+        });
+    </script>
+</body>
+</html>
